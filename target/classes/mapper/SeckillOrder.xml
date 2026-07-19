@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rabbiter.em.mapper.SeckillOrderMapper">
+
+    <resultMap id="SeckillOrderResultMap" type="com.rabbiter.em.entity.SeckillOrder">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="user_id" property="userId"/>
+        <result column="voucher_id" property="voucherId"/>
+        <result column="good_id" property="goodId"/>
+        <result column="good_name" property="goodName"/>
+        <result column="good_cover" property="goodCover"/>
+        <result column="quantity" property="quantity"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="seckill_price" property="seckillPrice"/>
+        <result column="discount_amount" property="discountAmount"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="receiver_name" property="receiverName"/>
+        <result column="receiver_phone" property="receiverPhone"/>
+        <result column="receiver_address" property="receiverAddress"/>
+        <result column="status" property="status"/>
+        <result column="payment_method" property="paymentMethod"/>
+        <result column="payment_time" property="paymentTime"/>
+        <result column="ship_time" property="shipTime"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="cancel_time" property="cancelTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 根据用户ID和秒杀券ID查询订单（防重复购买检查） -->
+    <select id="selectByUserAndSeckill" resultMap="SeckillOrderResultMap">
+        SELECT * FROM seckill_order 
+        WHERE user_id = #{userId} AND voucher_id = #{voucherId}
+        LIMIT 1
+    </select>
+
+    <!-- 根据用户ID查询所有订单 -->
+    <select id="selectByUserId" resultMap="SeckillOrderResultMap">
+        SELECT * FROM seckill_order 
+        WHERE user_id = #{userId} 
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据订单号查询订单 -->
+    <select id="selectByOrderNo" resultMap="SeckillOrderResultMap">
+        SELECT * FROM seckill_order 
+        WHERE order_no = #{orderNo}
+        LIMIT 1
+    </select>
+
+    <!-- 根据秒杀券ID查询所有订单 -->
+    <select id="selectByVoucherId" resultMap="SeckillOrderResultMap">
+        SELECT * FROM seckill_order 
+        WHERE voucher_id = #{voucherId} 
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据状态查询订单 -->
+    <select id="selectByStatus" resultMap="SeckillOrderResultMap">
+        SELECT * FROM seckill_order 
+        WHERE status = #{status} 
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 更新订单状态 -->
+    <update id="updateOrderStatus">
+        UPDATE seckill_order 
+        SET status = #{status}, update_time = CURRENT_TIMESTAMP
+        <if test="status == 1">
+            , payment_time = CURRENT_TIMESTAMP
+        </if>
+        <if test="status == 2">
+            , ship_time = CURRENT_TIMESTAMP
+        </if>
+        <if test="status == 3">
+            , complete_time = CURRENT_TIMESTAMP
+        </if>
+        <if test="status == 4">
+            , cancel_time = CURRENT_TIMESTAMP
+        </if>
+        WHERE id = #{orderId}
+    </update>
+
+    <!-- 更新支付信息 -->
+    <update id="updatePaymentInfo">
+        UPDATE seckill_order 
+        SET payment_method = #{paymentMethod}, 
+            status = 1, 
+            payment_time = CURRENT_TIMESTAMP, 
+            update_time = CURRENT_TIMESTAMP
+        WHERE id = #{orderId}
+    </update>
+
+    <!-- 统计秒杀券的订单数量 -->
+    <select id="countByVoucherId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM seckill_order 
+        WHERE voucher_id = #{voucherId}
+    </select>
+
+    <!-- 统计用户的订单数量 -->
+    <select id="countByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM seckill_order 
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 分页查询所有订单（管理员用） -->
+    <select id="selectAllWithPagination" resultMap="SeckillOrderResultMap">
+        SELECT so.*, sv.voucher_amount, sv.min_amount
+        FROM seckill_order so
+        LEFT JOIN voucher sv ON so.voucher_id = sv.id
+        ORDER BY so.create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 统计订单总数（管理员用） -->
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM seckill_order
+    </select>
+
+</mapper>

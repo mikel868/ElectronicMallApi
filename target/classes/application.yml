@@ -1,0 +1,63 @@
+server:
+  port: 9191
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/electronic_mall?serverTimezone=GMT%2b8
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 30MB
+  data:
+    redis:
+      database: 0
+      host: 192.168.13.132
+      port: 6379
+      lettuce:
+        pool:
+          min-idle: 0
+          max-active: 8
+          max-idle: 8
+          max-wait: -1ms
+      timeout: 30000ms
+
+  elasticsearch:
+    cluster-nodes: 192.168.13.132:9200
+    cluster-name: elasticsearch
+
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${API-KEY}
+      model-name: qwen3.6-flash·
+      log-requests: true
+      log-responses: true
+    streaming-chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${API-KEY}
+      model-name: qwen3.6-flash
+      log-requests: true
+      log-responses: true
+    embedding-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: ${API-KEY}
+      model-name: text-embedding-v3
+      log-requests: true
+      log-responses: true
+  community:
+    redis:
+      host: 192.168.13.132  # 与spring.data.redis保持一致
+      port: 6379            # 与spring.data.redis保持一致
+
+logging:
+  level:
+    dev.langchain4j: debug
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
