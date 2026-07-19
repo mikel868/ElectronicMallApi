@@ -1,0 +1,44 @@
+# ===== Maven =====
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ===== IntelliJ IDEA =====
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# ===== Eclipse / STS =====
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# ===== VS Code =====
+.vscode/
+
+# ===== Java =====
+*.class
+*.log
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# ===== 运行时上传的文件 =====
+avatar/
+file/
+uploads/
+
+# ===== 日志 =====
+logs/
+*.log
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
