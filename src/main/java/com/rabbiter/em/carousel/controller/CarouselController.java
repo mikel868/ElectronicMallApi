@@ -1,0 +1,91 @@
+package com.rabbiter.em.carousel.controller;
+
+import com.auth0.jwt.JWT;
+import com.rabbiter.em.shared.annotation.Authority;
+import com.rabbiter.em.shared.result.Result;
+import com.rabbiter.em.system.entity.AuthorityType;
+import com.rabbiter.em.product.entity.Good;
+import com.rabbiter.em.product.service.GoodService;
+import com.rabbiter.em.user.service.UserService;
+import com.rabbiter.em.carousel.entity.Carousel;
+import com.rabbiter.em.carousel.service.CarouselService;
+import com.rabbiter.em.user.entity.User;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/carousel")
+public class CarouselController {
+    @Resource
+    private CarouselService carouselService;
+    @Resource
+    private HttpServletRequest request;
+    @Resource
+    private UserService userService;
+    @Resource
+    private GoodService goodService;
+
+    public User getUser() {
+        String token = request.getHeader("token");
+        String username = JWT.decode(token).getAudience().get(0);
+        return userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+    }
+
+    /*
+    查询
+    */
+    @GetMapping("/{id}")
+    public Result findById(@PathVariable Long id) {
+        return Result.success(carouselService.getById(id));
+    }
+
+    @GetMapping
+    public Result findAll() {
+        List<Carousel> list = carouselService.getAllCarousel();
+        return Result.success(list);
+    }
+
+    /*
+    保存
+    */
+    @Authority(AuthorityType.requireAuthority)
+    @PostMapping
+    public Result save(@RequestBody Carousel carousel) {
+        Good good = goodService.getById(carousel.getGoodId());
+        if(good == null) {
+            return Result.error("400", "商品id错误，未查询到商品id = " + carousel.getGoodId());
+        }
+        carouselService.saveOrUpdate(carousel);
+        return Result.success();
+    }
+    @Authority(AuthorityType.requireAuthority)
+    @PutMapping
+    public Result update(@RequestBody Carousel carousel) {
+        Good good = goodService.getById(carousel.getGoodId());
+        if(good == null) {
+            return Result.error("400", "商品id错误，未查询到商品id = " + carousel.getGoodId());
+        }
+        carouselService.updateById(carousel);
+        return Result.success();
+    }
+
+    /*
+    删除
+    */
+    @Authority(AuthorityType.requireAuthority)
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Long id) {
+        carouselService.removeById(id);
+        return Result.success();
+    }
+
+
+
+
+
+}

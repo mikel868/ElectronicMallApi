@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rabbiter.em.mapper.GoodMapper">
+<mapper namespace="com.rabbiter.em.product.mapper.GoodMapper">
     <insert id="insertGood" useGeneratedKeys="true" keyProperty="id">
         insert into good(name, description, discount, category_id, imgs, create_time) value (#{good.name},#{good.description},#{good.discount},#{good.categoryId},#{good.imgs},#{good.createTime})
     </insert>
@@ -9,7 +9,7 @@
     </update>
 
 
-    <select id="findFrontGoods" resultType="com.rabbiter.em.entity.dto.GoodDTO">
+    <select id="findFrontGoods" resultType="com.rabbiter.em.product.dto.GoodDTO">
         SELECT good.*,MIN(good_standard.price)*discount as price FROM `good` LEFT JOIN good_standard on good.id = good_standard.good_id  WHERE is_delete = 0 AND recommend = 1 GROUP BY id  ORDER BY price ASC
     </select>
 </mapper>

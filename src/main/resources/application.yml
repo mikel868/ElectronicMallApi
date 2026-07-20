@@ -1,63 +1,47 @@
+# =========================================================
+#  公共配置（所有环境共享）
+# =========================================================
 server:
-  port: 9191
+  port: ${SERVER_PORT:9191}
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/electronic_mall?serverTimezone=GMT%2b8
-    username: root
-    password: 123456
+  application:
+    name: electronic-mall-api
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   servlet:
     multipart:
       max-file-size: 30MB
-  data:
-    redis:
-      database: 0
-      host: 192.168.13.132
-      port: 6379
-      lettuce:
-        pool:
-          min-idle: 0
-          max-active: 8
-          max-idle: 8
-          max-wait: -1ms
-      timeout: 30000ms
+      max-request-size: 30MB
 
-  elasticsearch:
-    cluster-nodes: 192.168.13.132:9200
-    cluster-name: elasticsearch
-
-langchain4j:
-  open-ai:
-    chat-model:
-      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-      api-key: ${API-KEY}
-      model-name: qwen3.6-flash·
-      log-requests: true
-      log-responses: true
-    streaming-chat-model:
-      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-      api-key: ${API-KEY}
-      model-name: qwen3.6-flash
-      log-requests: true
-      log-responses: true
-    embedding-model:
-      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-      api-key: ${API-KEY}
-      model-name: text-embedding-v3
-      log-requests: true
-      log-responses: true
-  community:
-    redis:
-      host: 192.168.13.132  # 与spring.data.redis保持一致
-      port: 6379            # 与spring.data.redis保持一致
-
-logging:
-  level:
-    dev.langchain4j: debug
-
-
+# MyBatis 全局
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+# 业务可调参数
+app:
+  jwt:
+    # 用环境变量覆盖；默认值仅用于本地开发
+    secret: ${JWT_SECRET:electronic-mall-default-secret-change-me}
+    expire-minutes: ${JWT_EXPIRE_MINUTES:1440}
+  cors:
+    # 生产环境必须改为白名单，例如：https://mall.example.com,http://123.45.67.89
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+  storage:
+    backend: ${STORAGE_BACKEND:local}
+
+# 文件存储抽象层（与 com.rabbiter.em.storage 对应）
+storage:
+  backend: ${STORAGE_BACKEND:local}
+  local:
+    # 本地适配器根目录，dev 默认项目根，prod 应改为 /opt/mall/data
+    base-path: ${STORAGE_LOCAL_BASE_PATH:./}
+
+# 日志
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    dev.langchain4j: ${LANGCHAIN4J_LOG_LEVEL:INFO}
+    com.rabbiter.em: ${APP_LOG_LEVEL:DEBUG}

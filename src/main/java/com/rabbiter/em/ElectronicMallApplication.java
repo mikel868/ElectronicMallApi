@@ -1,6 +1,6 @@
 package com.rabbiter.em;
 
-import com.rabbiter.em.utils.PathUtils;
+import com.rabbiter.em.shared.util.PathUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner; // 导入公开的子接口
 import org.springframework.boot.SpringApplication;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
         LiquibaseAutoConfiguration.class,
         org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration.class
 })
-@MapperScan("com.rabbiter.em.mapper")
+@MapperScan("com.rabbiter.em.**.mapper")
 public class ElectronicMallApplication {
 
     public static void main(String[] args) {

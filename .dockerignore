@@ -1,0 +1,14 @@
+target/
+.idea/
+*.iml
+.git/
+.gitignore
+avatar/
+file/
+*.log
+logs/
+deploy/data/
+deploy/.env
+node_modules/
+frontend/
+.claude/

@@ -1,7 +1,7 @@
 package com.rabbiter.em.config;
 
-import com.rabbiter.em.interceptor.AuthorityInterceptor;
-import com.rabbiter.em.interceptor.JwtInterceptor;
+import com.rabbiter.em.shared.interceptor.AuthorityInterceptor;
+import com.rabbiter.em.shared.interceptor.JwtInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

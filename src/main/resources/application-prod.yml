@@ -1,0 +1,76 @@
+# =========================================================
+#  生产环境（Docker Compose / 云服务器）
+#  通过 SPRING_PROFILES_ACTIVE=prod 激活
+#  所有中间件均通过环境变量注入，无默认值（强制必须配置）
+# =========================================================
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT:3306}/${MYSQL_DB}?serverTimezone=GMT%2b8&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    # 生产推荐加连接池监控
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      stat-view-servlet:
+        enabled: false
+  data:
+    redis:
+      database: ${REDIS_DB:0}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      lettuce:
+        pool:
+          min-idle: 2
+          max-active: 16
+          max-idle: 8
+          max-wait: -1ms
+      timeout: 5000ms
+  elasticsearch:
+    cluster-nodes: ${ES_HOST}:${ES_PORT:9200}
+    cluster-name: ${ES_CLUSTER_NAME:elasticsearch}
+
+# LangChain4j（生产使用更稳定的模型，关闭详细日志）
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: ${LLM_BASE_URL}
+      api-key: ${LLM_API_KEY}
+      model-name: ${LLM_CHAT_MODEL:qwen-plus}
+      log-requests: false
+      log-responses: false
+      temperature: 0.3
+    streaming-chat-model:
+      base-url: ${LLM_BASE_URL}
+      api-key: ${LLM_API_KEY}
+      model-name: ${LLM_CHAT_MODEL:qwen-plus}
+      log-requests: false
+      log-responses: false
+    embedding-model:
+      base-url: ${LLM_BASE_URL}
+      api-key: ${LLM_API_KEY}
+      model-name: ${LLM_EMBEDDING_MODEL:text-embedding-v3}
+      log-requests: false
+      log-responses: false
+  community:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+
+# 生产：本地存储根目录指向持久化卷
+storage:
+  local:
+    base-path: ${STORAGE_LOCAL_BASE_PATH:/opt/mall/data}
+
+# 生产收紧日志
+logging:
+  level:
+    root: WARN
+    com.rabbiter.em: INFO
+    dev.langchain4j: WARN
