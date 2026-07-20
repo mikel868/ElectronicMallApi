@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.rabbiter.em.cart.service.CartService;
 import com.rabbiter.em.shared.constants.Constants;
 import com.rabbiter.em.product.entity.Good;
 import com.rabbiter.em.order.entity.Order;

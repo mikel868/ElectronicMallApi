@@ -16,6 +16,7 @@ import com.rabbiter.em.product.dto.GoodDocument;
 import com.rabbiter.em.shared.exception.ServiceException;
 import com.rabbiter.em.product.mapper.GoodMapper;
 
+import com.rabbiter.em.system.service.ElasticsearchService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
