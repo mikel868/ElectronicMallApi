@@ -4,6 +4,7 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,8 +12,11 @@ import org.springframework.context.annotation.Configuration;
  * Elasticsearch 配置类
  * 配置Elasticsearch客户端连接和相关Bean
  * 使用7.12.1版本兼容配置
+ *
+ * 通过 app.es.enabled 控制是否启用，关闭后不创建任何 ES Bean。
  */
 @Configuration
+@ConditionalOnProperty(prefix = "app.es", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ElasticsearchConfig {
 
     @Value("${spring.elasticsearch.cluster-nodes}")

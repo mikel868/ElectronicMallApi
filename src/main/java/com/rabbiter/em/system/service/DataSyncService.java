@@ -4,6 +4,7 @@ import com.rabbiter.em.product.entity.Good;
 import com.rabbiter.em.product.dto.GoodDocument;
 import com.rabbiter.em.product.mapper.GoodMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +12,11 @@ import java.util.List;
 /**
  * 数据同步服务
  * 负责将数据库数据同步到Elasticsearch
+ *
+ * 通过 app.es.enabled 控制：false 时此类不实例化。
  */
 @Service
+@ConditionalOnProperty(prefix = "app.es", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DataSyncService {
 
     @Autowired

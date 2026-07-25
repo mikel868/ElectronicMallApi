@@ -31,6 +31,9 @@ app:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
   storage:
     backend: ${STORAGE_BACKEND:local}
+  es:
+    # Elasticsearch 总开关：false 时所有 ES Bean 不创建，搜索回退到 MySQL LIKE 查询
+    enabled: ${APP_ES_ENABLED:true}
 
 # 文件存储抽象层（与 com.rabbiter.em.storage 对应）
 storage:

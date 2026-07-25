@@ -15,7 +15,7 @@ if [ ! -f .env ]; then
 fi
 
 echo "==> [2/6] 创建数据目录"
-mkdir -p data/mysql data/redis data/es data/uploads/avatar data/uploads/file
+mkdir -p data/mysql data/redis data/uploads/avatar data/uploads/file
 mkdir -p nginx/certs
 mkdir -p ../frontend/dist
 

@@ -3,6 +3,11 @@
 #  通过 SPRING_PROFILES_ACTIVE=prod 激活
 #  所有中间件均通过环境变量注入，无默认值（强制必须配置）
 # =========================================================
+app:
+  es:
+    # 生产默认关闭 Elasticsearch（临时不上线）；恢复时设 APP_ES_ENABLED=true 并启用 docker-compose 中的 es 服务
+    enabled: ${APP_ES_ENABLED:false}
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

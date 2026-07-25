@@ -4,6 +4,7 @@ import com.rabbiter.em.product.entity.Good;
 import com.rabbiter.em.product.dto.GoodDocument;
 import com.rabbiter.em.product.mapper.GoodMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,11 @@ import java.util.List;
  * 负责将商品数据同步到 Elasticsearch
  * 使用新的 ElasticsearchService 替代已删除的 GoodRepository
  * 移除对 GoodService 的依赖以避免循环依赖
+ *
+ * 通过 app.es.enabled 控制：false 时此类不实例化。
  */
 @Service
+@ConditionalOnProperty(prefix = "app.es", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ElasticsearchSyncService {
 
     @Autowired

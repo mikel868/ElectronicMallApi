@@ -21,6 +21,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -32,8 +33,12 @@ import java.util.Map;
  * Elasticsearch 服务类
  * 提供商品搜索和数据同步功能
  * 使用RestHighLevelClient直接操作Elasticsearch 7.12.1
+ *
+ * 通过 app.es.enabled 控制：false 时此类不实例化，
+ * 调用方需通过 @Autowired(required = false) 注入并做空判。
  */
 @Service
+@ConditionalOnProperty(prefix = "app.es", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ElasticsearchService {
 
     @Autowired

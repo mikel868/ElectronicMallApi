@@ -98,6 +98,10 @@ Nginx :80/:443 → Spring Boot :9191 → MySQL/Redis/ES（同机容器）
 外部依赖：DashScope (通义千问) ← 通过 LlmClient Port 抽象，可换 DeepSeek/OpenAI/自部署
 ```
 
+> **Elasticsearch 开关**：ES 通过 `app.es.enabled` 控制。设为 `false` 时，`ElasticsearchConfig` / `ElasticsearchService` / `ElasticsearchSyncService` / `DataSyncService` 这 4 个 Bean 不会被创建，`SearchController` 与 `DataSyncController` 自动回退到 MySQL LIKE 查询，`GoodService` 的 CRUD 同步逻辑也会跳过。生产部署模板（`deploy/docker-compose.yml`）默认**不启动 ES 容器**，并通过环境变量 `APP_ES_ENABLED=false` 关闭。
+>
+> 重新启用 ES 的步骤：① 设置 `APP_ES_ENABLED=true`；② 取消 `docker-compose.yml` 中 `es:` 服务块和 `app.depends_on` / `app.environment` 中相关行的注释；③ 重启服务（无需改代码）。
+
 ---
 
 ## 4. 目录结构

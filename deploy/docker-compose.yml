@@ -29,7 +29,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       MYSQL_HOST: mysql
       REDIS_HOST: redis
-      ES_HOST: es
+      APP_ES_ENABLED: "false"   # 暂时关闭 ES，搜索回退到 MySQL
     ports:
       - "127.0.0.1:9191:9191"   # 只暴露给本机，由 Nginx 反代
     volumes:
@@ -38,8 +38,6 @@ services:
       mysql:
         condition: service_healthy
       redis:
-        condition: service_started
-      es:
         condition: service_started
     networks:
       - mall-net
@@ -84,24 +82,28 @@ services:
     networks:
       - mall-net
 
-  # ----------------- Elasticsearch -----------------
-  # ES 比较吃内存，单机部署建议宿主机至少 8G RAM
-  # 若内存吃紧，可在 .env 中调 ES_JAVA_OPTS
-  es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
-    container_name: em-es
-    restart: unless-stopped
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
-      - xpack.security.enabled=false
-      - cluster.name=elasticsearch
-    ports:
-      - "127.0.0.1:9200:9200"
-    volumes:
-      - ./data/es:/usr/share/elasticsearch/data
-    networks:
-      - mall-net
+  # ----------------- Elasticsearch (暂时下线) -----------------
+  # 暂时不上线 ES，搜索回退到 MySQL LIKE 查询。
+  # 重新启用步骤：
+  #   1. 在 .env 中设置 APP_ES_ENABLED=true
+  #   2. 取消下面 es: 服务块的注释
+  #   3. 在 app.depends_on 中恢复 es: condition: service_started
+  #   4. 在 app.environment 中恢复 ES_HOST: es
+  # es:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+  #   container_name: em-es
+  #   restart: unless-stopped
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=${ES_JAVA_OPTS:--Xms1g -Xmx1g}
+  #     - xpack.security.enabled=false
+  #     - cluster.name=elasticsearch
+  #   ports:
+  #     - "127.0.0.1:9200:9200"
+  #   volumes:
+  #     - ./data/es:/usr/share/elasticsearch/data
+  #   networks:
+  #     - mall-net
 
   # ----------------- Nginx (前端 + 反代) -----------------
   nginx:

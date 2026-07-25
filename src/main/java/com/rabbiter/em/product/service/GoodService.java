@@ -17,6 +17,7 @@ import com.rabbiter.em.shared.exception.ServiceException;
 import com.rabbiter.em.product.mapper.GoodMapper;
 
 import com.rabbiter.em.system.service.ElasticsearchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +42,15 @@ public class GoodService extends ServiceImpl<GoodMapper, Good> {
     private RedisTemplate<String, Good> redisTemplate;
     @Resource
     private com.rabbiter.em.shared.cache.CacheClient cacheClient;
-    @Resource
+    @Autowired(required = false)
     private ElasticsearchService elasticsearchService;
+
+    /**
+     * ES 是否启用（app.es.enabled=false 时 elasticsearchService 为 null）
+     */
+    private boolean esEnabled() {
+        return elasticsearchService != null;
+    }
 
     //查询一个商品的信息
     public Good getGoodById(Long id) {
@@ -92,8 +100,10 @@ public class GoodService extends ServiceImpl<GoodMapper, Good> {
     public void deleteGood(Long id) {
         cacheClient.invalidate(GOOD_TOKEN_KEY + id);
         goodMapper.goodDelete(id);
-        // 同步删除 Elasticsearch 中的商品
-        elasticsearchService.deleteGoodDocument(id);
+        // 同步删除 Elasticsearch 中的商品（ES 关闭时跳过）
+        if (esEnabled()) {
+            elasticsearchService.deleteGoodDocument(id);
+        }
         new Thread(() -> {
             try {
                 Thread.sleep(80);
@@ -124,10 +134,12 @@ public class GoodService extends ServiceImpl<GoodMapper, Good> {
             }).start();
         }
         
-        // 同步到 Elasticsearch
-        GoodDocument document = elasticsearchService.convertToDocument(good);
-        elasticsearchService.saveGoodDocument(document);
-        
+        // 同步到 Elasticsearch（ES 关闭时跳过）
+        if (esEnabled()) {
+            GoodDocument document = elasticsearchService.convertToDocument(good);
+            elasticsearchService.saveGoodDocument(document);
+        }
+
         return good.getId();
     }
 
@@ -150,9 +162,11 @@ public class GoodService extends ServiceImpl<GoodMapper, Good> {
     public void update(Good good) {
         updateById(good);
         cacheClient.invalidate(GOOD_TOKEN_KEY + good.getId());
-        // 同步更新到 Elasticsearch
-        GoodDocument document = elasticsearchService.convertToDocument(good);
-        elasticsearchService.saveGoodDocument(document);
+        // 同步更新到 Elasticsearch（ES 关闭时跳过）
+        if (esEnabled()) {
+            GoodDocument document = elasticsearchService.convertToDocument(good);
+            elasticsearchService.saveGoodDocument(document);
+        }
         new Thread(() -> {
             try {
                 Thread.sleep(80);
