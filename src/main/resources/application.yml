@@ -46,5 +46,6 @@ storage:
 logging:
   level:
     root: ${LOG_LEVEL:INFO}
-    dev.langchain4j: ${LANGCHAIN4J_LOG_LEVEL:INFO}
+    # AI 客服下线：恢复时取消下面一行注释
+    # dev.langchain4j: ${LANGCHAIN4J_LOG_LEVEL:INFO}
     com.rabbiter.em: ${APP_LOG_LEVEL:DEBUG}

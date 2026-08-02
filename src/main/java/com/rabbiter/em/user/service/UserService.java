@@ -13,7 +13,8 @@ import com.rabbiter.em.shared.dto.UserDTO;
 import com.rabbiter.em.shared.exception.ServiceException;
 import com.rabbiter.em.user.mapper.UserMapper;
 import com.rabbiter.em.shared.util.TokenUtils;
-import dev.langchain4j.service.UserName;
+// AI 客服下线，此 import 未使用，恢复 AI 时取消注释
+// import dev.langchain4j.service.UserName;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

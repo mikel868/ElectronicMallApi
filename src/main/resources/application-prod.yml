@@ -40,33 +40,34 @@ spring:
     cluster-nodes: ${ES_HOST}:${ES_PORT:9200}
     cluster-name: ${ES_CLUSTER_NAME:elasticsearch}
 
-# LangChain4j（生产使用更稳定的模型，关闭详细日志）
-langchain4j:
-  open-ai:
-    chat-model:
-      base-url: ${LLM_BASE_URL}
-      api-key: ${LLM_API_KEY}
-      model-name: ${LLM_CHAT_MODEL:qwen-plus}
-      log-requests: false
-      log-responses: false
-      temperature: 0.3
-    streaming-chat-model:
-      base-url: ${LLM_BASE_URL}
-      api-key: ${LLM_API_KEY}
-      model-name: ${LLM_CHAT_MODEL:qwen-plus}
-      log-requests: false
-      log-responses: false
-    embedding-model:
-      base-url: ${LLM_BASE_URL}
-      api-key: ${LLM_API_KEY}
-      model-name: ${LLM_EMBEDDING_MODEL:text-embedding-v3}
-      log-requests: false
-      log-responses: false
-  community:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD}
+# ============ AI 客服配置（已临时下线）============
+# 恢复 AI 时取消下面整段注释，并在 pom.xml 恢复 langchain4j 依赖
+# langchain4j:
+#   open-ai:
+#     chat-model:
+#       base-url: ${LLM_BASE_URL}
+#       api-key: ${LLM_API_KEY}
+#       model-name: ${LLM_CHAT_MODEL:qwen-plus}
+#       log-requests: false
+#       log-responses: false
+#       temperature: 0.3
+#     streaming-chat-model:
+#       base-url: ${LLM_BASE_URL}
+#       api-key: ${LLM_API_KEY}
+#       model-name: ${LLM_CHAT_MODEL:qwen-plus}
+#       log-requests: false
+#       log-responses: false
+#     embedding-model:
+#       base-url: ${LLM_BASE_URL}
+#       api-key: ${LLM_API_KEY}
+#       model-name: ${LLM_EMBEDDING_MODEL:text-embedding-v3}
+#       log-requests: false
+#       log-responses: false
+#   community:
+#     redis:
+#       host: ${REDIS_HOST}
+#       port: ${REDIS_PORT:6379}
+#       password: ${REDIS_PASSWORD}
 
 # 生产：本地存储根目录指向持久化卷
 storage:
@@ -78,4 +79,4 @@ logging:
   level:
     root: WARN
     com.rabbiter.em: INFO
-    dev.langchain4j: WARN
+    # AI 恢复时取消注释：dev.langchain4j: WARN

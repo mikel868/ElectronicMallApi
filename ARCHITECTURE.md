@@ -1,5 +1,24 @@
 # ElectronicMallApi 架构文档
 
+> ⚠️ **AI 客服子系统已临时下线**（适配 2C2G 小内存服务器）。代码与配置全部以注释形式保留，恢复时按下方清单逐项取消注释即可。
+>
+> ### 恢复 AI 客服的清单
+>
+> | # | 文件 | 操作 |
+> |---|------|------|
+> | 1 | `pom.xml` | 取消 `langchain4j-*` 与 `spring-boot-starter-webflux` 整段 XML 注释；删除 `maven-compiler-plugin` 中的 `<excludes>` 节 |
+> | 2 | `src/main/java/com/rabbiter/em/user/service/UserService.java` | 取消 `dev.langchain4j.service.UserName` import 的注释 |
+> | 3 | `src/main/resources/application.yml` | 取消 `dev.langchain4j:` 日志行的注释 |
+> | 4 | `src/main/resources/application-dev.yml` | 取消 `langchain4j:` 配置块的注释 |
+> | 5 | `src/main/resources/application-prod.yml` | 取消 `langchain4j:` 配置块和日志行的注释 |
+> | 6 | `deploy/.env.example` | 取消 `LLM_*` 与 `LANGCHAIN4J_LOG_LEVEL` 的注释 |
+> | 7 | `deploy/nginx/mall.conf` | 取消 `/chat` location 块的注释 |
+> | 8 | 数据库 | 执行 `ai_order.sql`（如已存在 `ai_order` 表可跳过） |
+>
+> AI 源码本身未做任何改动，参见 `src/main/java/com/rabbiter/em/ai/` 与 `src/main/java/com/rabbiter/em/config/ConsultantConfig.java`。
+
+---
+
 > 本文档是项目的「地图」。读完后你应能回答：项目分几层？AI 客服子系统怎么扩展？怎么从开发环境切到生产环境？怎么换 LLM / 向量库 / 存储后端？
 
 ---

@@ -36,11 +36,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- WebFlux (来自AI项目) -->
+        <!-- WebFlux (仅 AI 客服的 SSE 流式接口用到；AI 下线后可移除，恢复 AI 时取消注释)
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+        -->
 
         <!-- Redis (合并两个项目的Redis依赖) -->
         <dependency>
@@ -161,7 +162,13 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- AI相关依赖 (来自AI项目) -->
+        <!-- ========================================================= -->
+        <!-- AI 客服相关依赖（已临时下线，节省 2C2G 服务器资源）          -->
+        <!-- 恢复步骤：取消下面整段 XML 注释，并在 maven-compiler-plugin  -->
+        <!-- 中移除 <excludes> 节，然后取消 application*.yml、nginx、     -->
+        <!-- .env.example 中相关配置的注释                              -->
+        <!-- ========================================================= -->
+        <!--
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
@@ -192,6 +199,7 @@
             <artifactId>langchain4j-community-redis-spring-boot-starter</artifactId>
             <version>${langchain4j.version}</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -253,6 +261,18 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>${java.version}</release>
+                    <!-- AI 客服子系统临时下线：不参与编译，恢复 AI 时删除整个 <excludes> 节 -->
+                    <excludes>
+                        <exclude>com/rabbiter/em/ai/**/*.java</exclude>
+                        <exclude>com/rabbiter/em/config/ConsultantConfig.java</exclude>
+                    </excludes>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.36</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

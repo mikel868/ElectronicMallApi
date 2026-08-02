@@ -25,31 +25,33 @@ spring:
     cluster-nodes: ${ES_HOST:192.168.13.132}:${ES_PORT:9200}
     cluster-name: elasticsearch
 
-# LangChain4j（开发用 DashScope）
-langchain4j:
-  open-ai:
-    chat-model:
-      base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
-      api-key: ${LLM_API_KEY:${API-KEY:}}
-      model-name: ${LLM_CHAT_MODEL:qwen3.6-flash}
-      log-requests: true
-      log-responses: true
-    streaming-chat-model:
-      base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
-      api-key: ${LLM_API_KEY:${API-KEY:}}
-      model-name: ${LLM_CHAT_MODEL:qwen3.6-flash}
-      log-requests: true
-      log-responses: true
-    embedding-model:
-      base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
-      api-key: ${LLM_API_KEY:${API-KEY:}}
-      model-name: ${LLM_EMBEDDING_MODEL:text-embedding-v3}
-      log-requests: true
-      log-responses: true
-  community:
-    redis:
-      host: ${REDIS_HOST:192.168.13.132}
-      port: ${REDIS_PORT:6379}
+# ============ AI 客服配置（已临时下线）============
+# 恢复 AI 时：把下面这段从 # 开头逐行去掉注释；
+# 并在 pom.xml 取消 langchain4j 依赖注释、移除 <excludes> 节
+# langchain4j:
+#   open-ai:
+#     chat-model:
+#       base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+#       api-key: ${LLM_API_KEY:${API-KEY:}}
+#       model-name: ${LLM_CHAT_MODEL:qwen3.6-flash}
+#       log-requests: true
+#       log-responses: true
+#     streaming-chat-model:
+#       base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+#       api-key: ${LLM_API_KEY:${API-KEY:}}
+#       model-name: ${LLM_CHAT_MODEL:qwen3.6-flash}
+#       log-requests: true
+#       log-responses: true
+#     embedding-model:
+#       base-url: ${LLM_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+#       api-key: ${LLM_API_KEY:${API-KEY:}}
+#       model-name: ${LLM_EMBEDDING_MODEL:text-embedding-v3}
+#       log-requests: true
+#       log-responses: true
+#   community:
+#     redis:
+#       host: ${REDIS_HOST:192.168.13.132}
+#       port: ${REDIS_PORT:6379}
 
 # 本地文件存储根目录（项目根）
 storage:
