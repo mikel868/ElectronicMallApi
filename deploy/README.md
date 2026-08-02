@@ -229,32 +229,24 @@ ls /opt/ElectronicMallApi/deploy/
 
 ## 7. 第六步：准备数据库脚本
 
-⚠️ **项目里只有 `seckill_voucher.sql`（秒杀表），缺主业务表（user/goods/order/cart 等）。**
-
-### 你需要从本地数据库导出一份完整 schema
-
-本地电脑（已装 MySQL）打开 cmd：
-
-```bash
-mysqldump -u root -p --no-data --routines --triggers electronic_mall > schema.sql
-# 输入密码后会在当前目录生成 schema.sql，约 10-50KB
-```
-
-把这个 `schema.sql` 上传到服务器项目根目录：
-
-```bash
-# 本地 PowerShell
-scp schema.sql root@8.163.78.177:/opt/ElectronicMallApi/
-```
+✅ **`schema.sql` 已包含在项目根目录**（18 张表的建表语句 + 测试数据，约 38KB），无需手动导出。
 
 服务器上验证：
 
 ```bash
-ls /opt/ElectronicMallApi/*.sql
-# 应该看到 schema.sql 和 seckill_voucher.sql
+ls /opt/ElectronicMallApi/schema.sql
 ```
 
-> **为什么需要这步**：MySQL 容器第一次启动时会自动执行项目根下所有 `.sql`（除了 `ai_order.sql`，因为 AI 已下线），自动建表。没这步启动会成功但 API 调用全报"表不存在"。
+> **如果文件不存在或想重新生成**（比如改了表结构后），从本地数据库导出：
+>
+> ```bash
+> # 本地 cmd
+> "D:\software\mysql-8.0.39-winx64\bin\mysqldump.exe" -u root -p123456 --routines --triggers electronic_mall > schema.sql
+> ```
+>
+> 然后 scp 上传到 `/opt/ElectronicMallApi/`。
+
+> **作用**：MySQL 容器第一次启动时会自动执行 `schema.sql` 建表 + 导入测试数据。没这步启动会成功但 API 调用全报"表不存在"。
 
 ---
 

@@ -13,7 +13,7 @@
 > | 5 | `src/main/resources/application-prod.yml` | 取消 `langchain4j:` 配置块和日志行的注释 |
 > | 6 | `deploy/.env.example` | 取消 `LLM_*` 与 `LANGCHAIN4J_LOG_LEVEL` 的注释 |
 > | 7 | `deploy/nginx/mall.conf` | 取消 `/chat` location 块的注释 |
-> | 8 | 数据库 | 执行 `ai_order.sql`（如已存在 `ai_order` 表可跳过） |
+> | 8 | 数据库 | `ai_order` 表已包含在 `schema.sql` 中，无需额外操作 |
 >
 > AI 源码本身未做任何改动，参见 `src/main/java/com/rabbiter/em/ai/` 与 `src/main/java/com/rabbiter/em/config/ConsultantConfig.java`。
 
