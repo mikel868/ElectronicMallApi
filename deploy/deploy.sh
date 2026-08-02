@@ -21,7 +21,14 @@ mkdir -p ../frontend/dist
 
 echo "==> [3/6] 拷贝 SQL 初始化脚本"
 mkdir -p sql/init
-cp ../*.sql sql/init/ 2>/dev/null || echo "  项目根无 SQL 文件，跳过"
+# 跳过 ai_order.sql（AI 客服已临时下线，不建表）
+for f in ../*.sql; do
+  [ -f "$f" ] || continue
+  base=$(basename "$f")
+  [ "$base" = "ai_order.sql" ] && continue
+  cp "$f" sql/init/
+  echo "  已加入初始化脚本: $base"
+done
 
 echo "==> [4/6] 构建后端镜像"
 docker compose build app
