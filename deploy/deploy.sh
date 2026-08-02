@@ -21,14 +21,14 @@ mkdir -p ../frontend/dist
 
 echo "==> [3/6] 拷贝 SQL 初始化脚本"
 mkdir -p sql/init
-# 跳过 ai_order.sql（AI 客服已临时下线，不建表）
-for f in ../*.sql; do
-  [ -f "$f" ] || continue
-  base=$(basename "$f")
-  [ "$base" = "ai_order.sql" ] && continue
-  cp "$f" sql/init/
-  echo "  已加入初始化脚本: $base"
-done
+# 只使用项目根的 schema.sql（已含完整建表 + 测试数据）
+if [ -f ../schema.sql ]; then
+  cp ../schema.sql sql/init/
+  echo "  已加入初始化脚本: schema.sql"
+else
+  echo "  ❗ 未找到 ../schema.sql，MySQL 启动后将没有表"
+  echo "  本地生成命令：mysqldump -u root -p --routines --triggers electronic_mall > schema.sql"
+fi
 
 echo "==> [4/6] 构建后端镜像"
 docker compose build app
