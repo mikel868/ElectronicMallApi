@@ -164,9 +164,10 @@
 
         <!-- ========================================================= -->
         <!-- AI 客服相关依赖（已临时下线，节省 2C2G 服务器资源）          -->
-        <!-- 恢复步骤：取消下面整段 XML 注释，并在 maven-compiler-plugin  -->
-        <!-- 中移除 <excludes> 节，然后取消 application*.yml、nginx、     -->
-        <!-- .env.example 中相关配置的注释                              -->
+        <!-- 恢复步骤：1) 取消下面整段 XML 注释                          -->
+        <!--           2) 把 archived/ai 移回 src/main/java/com/rabbiter/em/ai -->
+        <!--           3) 把 archived/config/ConsultantConfig.java 移回 src/main/java/com/rabbiter/em/config/ -->
+        <!--           4) 取消 application*.yml、nginx、.env.example 中相关配置的注释 -->
         <!-- ========================================================= -->
         <!--
         <dependency>
@@ -261,11 +262,8 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>${java.version}</release>
-                    <!-- AI 客服子系统临时下线：不参与编译，恢复 AI 时删除整个 <excludes> 节 -->
-                    <excludes>
-                        <exclude>com/rabbiter/em/ai/**/*.java</exclude>
-                        <exclude>com/rabbiter/em/config/ConsultantConfig.java</exclude>
-                    </excludes>
+                    <!-- AI 客服子系统已移到 archived/，不参与编译。恢复时把 archived/ai 移回
+                         src/main/java/com/rabbiter/em/ai，并取消 pom 中 langchain4j 依赖注释 -->
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

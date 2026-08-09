@@ -5,13 +5,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:electronic_mall}?serverTimezone=GMT%2b8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3307}/${MYSQL_DB:electronic_mall}?serverTimezone=GMT%2b8&useSSL=false&allowPublicKeyRetrieval=true
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASSWORD:123456}
   data:
     redis:
       database: ${REDIS_DB:0}
-      host: ${REDIS_HOST:192.168.13.132}
+      host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
       lettuce:
@@ -50,7 +50,7 @@ spring:
 #       log-responses: true
 #   community:
 #     redis:
-#       host: ${REDIS_HOST:192.168.13.132}
+#       host: ${REDIS_HOST:localhost}
 #       port: ${REDIS_PORT:6379}
 
 # 本地文件存储根目录（项目根）

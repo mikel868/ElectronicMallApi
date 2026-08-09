@@ -35,6 +35,10 @@ avatar/
 file/
 uploads/
 
+# ===== Docker 运行时数据（MySQL/Redis 等持久化目录，含敏感信息）=====
+deploy/data/
+deploy/.env
+
 # ===== 日志 =====
 logs/
 *.log
